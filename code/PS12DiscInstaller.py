@@ -11,6 +11,14 @@ APP_TITLE = "PS1-PS2 Disc Installer"
 MODE = "dark"
 COLOR_THEME = "dark-blue"
 
+BT_INSTALL_PS1 = "img/PS1DiscInstaller_icon.png"
+BT_UNINSTALL_PS1 = "img/uninstallPS1_icon.png"
+
+BT_INSTALL_PS2 = "img/PS2DiscInstaller_icon.png"
+BT_UNINSTALL_PS2 = "img/uninstallPS2_icon.png"
+
+BT_EXIT = "img/@/shutdownIcon.png"
+
 #BUTTONS COLORS
 BT_SELECTED_COLOR = "#1f538d"
 BT_UNSELECTED_COLOR = "transparent"
@@ -54,30 +62,46 @@ class mainWINDOW():
         self.root.config(cursor="none")
         #SET FULLSCREEN
         self.root.attributes("-fullscreen", "True")
+        
+        MAX_WIDTH = self.root.winfo_screenwidth()
+        MAX_HEIGHT = self.root.winfo_screenheight()
+        PAD_X = 25
+        PAD_Y = 25
+        ICON_WIDTH = 256
+        ICON_HEIGHT = ICON_WIDTH
 
-        self.BT_FRAME = ctk.CTkFrame(master=self.root)
-        self.BT_FRAME.grid_columnconfigure(0, weight=1)
-        self.BT_FRAME.pack(pady=20, padx=20,)
+        OFFSET_WIDTH = (ICON_WIDTH+PAD_X)/2
+
+        INSTALL_PS1_POSITION = -2
+        UNINSTALL_PS1_POSITION = -1
+        INSTALL_PS2_POSITION = 0
+        UNINSTALL_PS2_POSITION = 1
+        EXIT_POSITION = 2
 
         #CREATE PS1 INSTALL DISC BUTTON
-        self.BT_INSTALL_PS1_GAME = ctk.CTkButton(master=self.BT_FRAME, text="Install PS1 Disc", command=self.installPS1game, fg_color=BT_SELECTED_COLOR, hover=False)
-        self.BT_INSTALL_PS1_GAME.grid(row=0, column=0, pady=6, padx=6)
+        BT_INSTALL_PS1_GAME_IMAGE = ctk.CTkImage(light_image=Image.open(BT_INSTALL_PS1), size=(ICON_WIDTH-PAD_X, ICON_HEIGHT-PAD_Y))
+        self.BT_INSTALL_PS1_GAME = ctk.CTkButton(master=self.root, text="Install PS1 Disc", image=BT_INSTALL_PS1_GAME_IMAGE, compound="top", command=self.installPS1game, fg_color=BT_SELECTED_COLOR, hover=False)
+        self.BT_INSTALL_PS1_GAME.place(x=MAX_WIDTH/2+INSTALL_PS1_POSITION*(ICON_WIDTH+PAD_X)-OFFSET_WIDTH, y=MAX_HEIGHT/2-ICON_HEIGHT/2)
 
         #CREATE PS1 UNINSTALL DISC BUTTON
-        self.BT_UNINSTALL_PS1_GAME = ctk.CTkButton(master=self.BT_FRAME, text="Uninstall PS1 Disc", command=self.uninstallPS1game, fg_color=BT_UNSELECTED_COLOR, hover=False)
-        self.BT_UNINSTALL_PS1_GAME.grid(row=0, column=1, pady=6, padx=6)
+        BT_UNINSTALL_PS1_GAME_IMAGE = ctk.CTkImage(light_image=Image.open(BT_UNINSTALL_PS1), size=(ICON_WIDTH-PAD_X, ICON_HEIGHT-PAD_Y))
+        self.BT_UNINSTALL_PS1_GAME = ctk.CTkButton(master=self.root, text="Uninstall PS1 Disc", image=BT_UNINSTALL_PS1_GAME_IMAGE, compound="top", command=self.uninstallPS1game, fg_color=BT_UNSELECTED_COLOR, hover=False)
+        self.BT_UNINSTALL_PS1_GAME.place(x=MAX_WIDTH/2+UNINSTALL_PS1_POSITION*(ICON_WIDTH+PAD_X)-OFFSET_WIDTH, y=MAX_HEIGHT/2-ICON_HEIGHT/2)
 
         #CREATE PS2 INSTALL DISC BUTTON
-        self.BT_INSTALL_PS2_GAME = ctk.CTkButton(master=self.BT_FRAME, text="Install PS2 Disc", command=self.installPS2game, fg_color=BT_UNSELECTED_COLOR, hover=False)
-        self.BT_INSTALL_PS2_GAME.grid(row=1, column=0, pady=6, padx=6)
+        BT_INSTALL_PS2_GAME_IMAGE = ctk.CTkImage(light_image=Image.open(BT_INSTALL_PS2), size=(ICON_WIDTH-PAD_X, ICON_HEIGHT-PAD_Y))
+        self.BT_INSTALL_PS2_GAME = ctk.CTkButton(master=self.root, text="Install PS2 Disc", image=BT_INSTALL_PS2_GAME_IMAGE, compound="top", command=self.installPS2game, fg_color=BT_UNSELECTED_COLOR, hover=False)
+        self.BT_INSTALL_PS2_GAME.place(x=MAX_WIDTH/2+INSTALL_PS2_POSITION*(ICON_WIDTH+PAD_X)-OFFSET_WIDTH, y=MAX_HEIGHT/2-ICON_HEIGHT/2)
 
         #CREATE PS2 UNINSTALL DISC BUTTON
-        self.BT_UNINSTALL_PS2_GAME = ctk.CTkButton(master=self.BT_FRAME, text="Uninstall PS2 Disc", command=self.uninstallPS2game, fg_color=BT_UNSELECTED_COLOR, hover=False)
-        self.BT_UNINSTALL_PS2_GAME.grid(row=1, column=1, pady=6, padx=6)
+        BT_UNINSTALL_PS2_GAME_IMAGE = ctk.CTkImage(light_image=Image.open(BT_UNINSTALL_PS2), size=(ICON_WIDTH-PAD_X, ICON_HEIGHT-PAD_Y))
+        self.BT_UNINSTALL_PS2_GAME = ctk.CTkButton(master=self.root, text="Uninstall PS2 Disc", image=BT_UNINSTALL_PS2_GAME_IMAGE, compound="top", command=self.uninstallPS2game, fg_color=BT_UNSELECTED_COLOR, hover=False)
+        self.BT_UNINSTALL_PS2_GAME.place(x=MAX_WIDTH/2+UNINSTALL_PS2_POSITION*(ICON_WIDTH+PAD_X)-OFFSET_WIDTH, y=MAX_HEIGHT/2-ICON_HEIGHT/2)
 
         #CLOSE APP BUTTON
-        self.BT_CLOSE_APP = ctk.CTkButton(master=self.BT_FRAME, text="Exit", command=self.closeApp, fg_color=BT_UNSELECTED_COLOR, hover=False)
-        self.BT_CLOSE_APP.grid(row=2, column=0, pady=6, padx=6, columnspan=2, sticky="ew")
+        BT_EXIT_IMAGE = ctk.CTkImage(light_image=Image.open(BT_EXIT), size=(ICON_WIDTH-PAD_X, ICON_HEIGHT-PAD_Y))
+        self.BT_CLOSE_APP = ctk.CTkButton(master=self.root, text="Exit", image=BT_EXIT_IMAGE, compound="top", command=self.closeApp, fg_color=BT_UNSELECTED_COLOR, hover=False)
+        self.BT_CLOSE_APP.place(x=MAX_WIDTH/2+EXIT_POSITION*(ICON_WIDTH+PAD_X)-OFFSET_WIDTH, y=MAX_HEIGHT/2-ICON_HEIGHT/2)
 
     def installPS1game(self):
         GAME_ID = PS.PS1_makeISOfile(self.ISO_MAKER_PATH, self.DISC_VOLUME, self.PS1_OUTPUT)
@@ -542,10 +566,10 @@ class mainWINDOW():
 
 #EVENTS
 def upEvent(event):
-    app.updateSelectedButton(-2)
+    app.updateSelectedButton(-1)
 
 def downEvent(event):
-    app.updateSelectedButton(2)
+    app.updateSelectedButton(1)
 
 def leftEvent(event):
     app.updateSelectedButton(-1)

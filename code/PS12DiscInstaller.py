@@ -108,80 +108,6 @@ class mainWINDOW():
         PS.coverDownloader(GAME_ID, self.PS1_COVER_DIR, self.PS1_COVER_URL)
 
     def uninstallPS1game(self):
-        self.PS1Window()
-
-    def installPS2game(self):
-        GAME_ID = PS.PS2_makeISOfile(self.ISO_MAKER_PATH, self.DISC_VOLUME, self.PS2_OUTPUT)
-        PS.coverDownloader(GAME_ID, self.PS2_COVER_DIR, self.PS2_COVER_URL)
-
-    def uninstallPS2game(self):
-        self.PS2Window()
-
-    def closeApp(self):
-        self.root.destroy()
-
-    def updateSelectedButton(self, NUMBER_TO_SUM):
-        #SET THE NEW INDEX OF SELECTED BUTTON   
-        self.BT_SELECTED += NUMBER_TO_SUM
-
-        if self.BT_SELECTED < 0:
-            self.BT_SELECTED = 0
-        elif self.BT_SELECTED >= len(self.BT_LIST):
-            self.BT_SELECTED = len(self.BT_LIST) - 1
-
-        #SET ALL BUTTONS TO UNSELECTED COLOR
-        for BUTTON in self.BT_LIST:
-            if BUTTON == "BT_INSTALL_PS1_GAME":
-                self.BT_INSTALL_PS1_GAME.configure(fg_color=BT_UNSELECTED_COLOR)
-            elif BUTTON == "BT_UNINSTALL_PS1_GAME":
-                self.BT_UNINSTALL_PS1_GAME.configure(fg_color=BT_UNSELECTED_COLOR)
-            elif BUTTON == "BT_INSTALL_PS2_GAME":
-                self.BT_INSTALL_PS2_GAME.configure(fg_color=BT_UNSELECTED_COLOR)
-            elif BUTTON == "BT_UNINSTALL_PS2_GAME":
-                self.BT_UNINSTALL_PS2_GAME.configure(fg_color=BT_UNSELECTED_COLOR)
-            elif BUTTON == "BT_CLOSE_APP":
-                self.BT_CLOSE_APP.configure(fg_color=BT_UNSELECTED_COLOR)
-        
-        #SET ONLY THE SELECTED BUTTON WITH SELECTED COLOR
-        for BT_INDEX, BUTTON in enumerate(self.BT_LIST):
-            if BT_INDEX == self.BT_SELECTED:
-                if BUTTON == "BT_INSTALL_PS1_GAME":
-                    self.BT_INSTALL_PS1_GAME.configure(fg_color=BT_SELECTED_COLOR)
-                    break
-                elif BUTTON == "BT_UNINSTALL_PS1_GAME":
-                    self.BT_UNINSTALL_PS1_GAME.configure(fg_color=BT_SELECTED_COLOR)
-                    break
-                elif BUTTON == "BT_INSTALL_PS2_GAME":
-                    self.BT_INSTALL_PS2_GAME.configure(fg_color=BT_SELECTED_COLOR)
-                    break
-                elif BUTTON == "BT_UNINSTALL_PS2_GAME":
-                    self.BT_UNINSTALL_PS2_GAME.configure(fg_color=BT_SELECTED_COLOR)
-                    break
-                elif BUTTON == "BT_CLOSE_APP":
-                    self.BT_CLOSE_APP.configure(fg_color=BT_SELECTED_COLOR)
-                    break
-    
-    def runSelectedButton(self):
-        #RUN THE METHOD OF THE SELECTED BUTTON
-        for BT_INDEX, BUTTON in enumerate(self.BT_LIST):
-            if BT_INDEX == self.BT_SELECTED:
-                if BUTTON == "BT_INSTALL_PS1_GAME":
-                    self.installPS1game()
-                    break
-                elif BUTTON == "BT_UNINSTALL_PS1_GAME":
-                    self.uninstallPS1game()
-                    break
-                elif BUTTON == "BT_INSTALL_PS2_GAME":
-                    self.installPS2game()
-                    break
-                elif BUTTON == "BT_UNINSTALL_PS2_GAME":
-                    self.uninstallPS2game()
-                    break
-                elif BUTTON == "BT_CLOSE_APP":
-                    self.closeApp()
-                    break
-
-    def PS1Window(self):
         #CREATE WINDOW
         GAMES_WINDOW = ctk.CTkToplevel()
         #SET FULLSCREEN
@@ -273,6 +199,20 @@ class mainWINDOW():
             self.BT_SELECTED = 1
             GAMES_WINDOW.destroy()
 
+        def placeButtons(START_ROW, NUMBER_OF_COLUMNS):
+            FIRST_BUTTON = START_ROW * NUMBER_OF_COLUMNS
+            FINAL_BUTTON = FIRST_BUTTON + NUMBER_OF_COLUMNS * 2
+
+            if FINAL_BUTTON > len(BT_GAME_LIST):
+                FINAL_BUTTON = len(BT_GAME_LIST)
+
+            for index in range(FIRST_BUTTON,FINAL_BUTTON):
+                BT_COLUMN = (index - FIRST_BUTTON) if (index - FIRST_BUTTON) < NUMBER_OF_COLUMNS else (index - FIRST_BUTTON - NUMBER_OF_COLUMNS)
+                BT_ROW = 0 if (index - FIRST_BUTTON) < NUMBER_OF_COLUMNS else 1
+
+    
+                BT_GAME_LIST[index].place(x=OFFSET_WIDTH+(BT_COLUMN)*(COVER_WIDTH+PAD_X)+PAD_X, y=OFFSET_HEIGHT+(BT_ROW)*(COVER_HEIGHT+PAD_Y)+PAD_Y)
+
         #SET BIDINGS
         GAMES_WINDOW.bind(BT_UP, upEvent)
         GAMES_WINDOW.bind(BT_DOWN, downEvent)
@@ -286,7 +226,7 @@ class mainWINDOW():
         MAX_HEIGHT = GAMES_WINDOW.winfo_screenheight()
         PAD_X = 6
         PAD_Y = 6
-        COVER_WIDTH = 150
+        COVER_WIDTH = 400
         COVER_HEIGHT = COVER_WIDTH
 
         IDs = ["SLPS",
@@ -323,7 +263,7 @@ class mainWINDOW():
 
 
         NUMBER_OF_COLUMNS = int(MAX_WIDTH / (COVER_WIDTH + PAD_X))
-        NUMBER_OF_ROWS = int(round(len(GAME_LIST) / NUMBER_OF_COLUMNS, 0))
+        NUMBER_OF_ROWS = 2#int(round(len(GAME_LIST) / NUMBER_OF_COLUMNS, 0))
         LENGHT_FIRST_ROW = NUMBER_OF_COLUMNS if len(GAME_LIST) > NUMBER_OF_COLUMNS else len(GAME_LIST)
         OFFSET_WIDTH = int((MAX_WIDTH - LENGHT_FIRST_ROW*(COVER_WIDTH+PAD_X))/2)
         OFFSET_HEIGHT = int((MAX_HEIGHT - NUMBER_OF_ROWS*(COVER_HEIGHT+PAD_Y))/2 - ((COVER_HEIGHT/2) if NUMBER_OF_ROWS < 1 else 0))
@@ -336,8 +276,8 @@ class mainWINDOW():
 
         if len(GAME_LIST) > 0:
             for index, item in enumerate(GAME_LIST):
-                BT_ROW = int(index / NUMBER_OF_COLUMNS)
-                BT_COLUMN = int(round(index % NUMBER_OF_COLUMNS,0))
+                #BT_ROW = int(index / NUMBER_OF_COLUMNS)
+                #BT_COLUMN = int(round(index % NUMBER_OF_COLUMNS,0))
 
                 BT_COVER = None
 
@@ -357,22 +297,28 @@ class mainWINDOW():
                         GAME_TITLE += CHAR
 
                 BT_GAME_LIST.append(ctk.CTkButton(GAMES_WINDOW, text=GAME_TITLE, width=COVER_WIDTH, height=COVER_HEIGHT, image=BT_COVER, border_spacing=0, corner_radius=0, fg_color=BT_UNSELECTED_COLOR))
-                BT_GAME_LIST[index].place(x=OFFSET_WIDTH+(BT_COLUMN)*(COVER_WIDTH+PAD_X)+PAD_X, y=OFFSET_HEIGHT+(BT_ROW)*(COVER_HEIGHT+PAD_Y)+PAD_Y)
+                #BT_GAME_LIST[index].place(x=OFFSET_WIDTH+(BT_COLUMN)*(COVER_WIDTH+PAD_X)+PAD_X, y=OFFSET_HEIGHT+(BT_ROW)*(COVER_HEIGHT+PAD_Y)+PAD_Y)
 
             BT_GAME_LIST[0].configure(fg_color=BT_SELECTED_COLOR)
 
         else:
             BT_GAME_LIST.append(ctk.CTkButton(GAMES_WINDOW, text="0 games installed.", width=COVER_WIDTH, height=COVER_HEIGHT, border_spacing=0, corner_radius=0, fg_color=BT_SELECTED_COLOR))
-            BT_GAME_LIST[0].place(x=(MAX_WIDTH-COVER_WIDTH-PAD_X)/2, y=(MAX_HEIGHT-COVER_HEIGHT-PAD_Y)/2)
+            #BT_GAME_LIST[0].place(x=(MAX_WIDTH-COVER_WIDTH-PAD_X)/2, y=(MAX_HEIGHT-COVER_HEIGHT-PAD_Y)/2)
 
         self.BT_SELECTED = 0
+
+        placeButtons(0,NUMBER_OF_COLUMNS)
 
         GAMES_WINDOW.mainloop()
 
         rmtree("temp")
         os.mkdir("temp")
 
-    def PS2Window(self):
+    def installPS2game(self):
+        GAME_ID = PS.PS2_makeISOfile(self.ISO_MAKER_PATH, self.DISC_VOLUME, self.PS2_OUTPUT)
+        PS.coverDownloader(GAME_ID, self.PS2_COVER_DIR, self.PS2_COVER_URL)
+
+    def uninstallPS2game(self):
         #CREATE WINDOW
         GAMES_WINDOW = ctk.CTkToplevel()
         #SET FULLSCREEN
@@ -563,6 +509,70 @@ class mainWINDOW():
 
         rmtree("temp")
         os.mkdir("temp")
+
+    def closeApp(self):
+        self.root.destroy()
+
+    def updateSelectedButton(self, NUMBER_TO_SUM):
+        #SET THE NEW INDEX OF SELECTED BUTTON   
+        self.BT_SELECTED += NUMBER_TO_SUM
+
+        if self.BT_SELECTED < 0:
+            self.BT_SELECTED = 0
+        elif self.BT_SELECTED >= len(self.BT_LIST):
+            self.BT_SELECTED = len(self.BT_LIST) - 1
+
+        #SET ALL BUTTONS TO UNSELECTED COLOR
+        for BUTTON in self.BT_LIST:
+            if BUTTON == "BT_INSTALL_PS1_GAME":
+                self.BT_INSTALL_PS1_GAME.configure(fg_color=BT_UNSELECTED_COLOR)
+            elif BUTTON == "BT_UNINSTALL_PS1_GAME":
+                self.BT_UNINSTALL_PS1_GAME.configure(fg_color=BT_UNSELECTED_COLOR)
+            elif BUTTON == "BT_INSTALL_PS2_GAME":
+                self.BT_INSTALL_PS2_GAME.configure(fg_color=BT_UNSELECTED_COLOR)
+            elif BUTTON == "BT_UNINSTALL_PS2_GAME":
+                self.BT_UNINSTALL_PS2_GAME.configure(fg_color=BT_UNSELECTED_COLOR)
+            elif BUTTON == "BT_CLOSE_APP":
+                self.BT_CLOSE_APP.configure(fg_color=BT_UNSELECTED_COLOR)
+        
+        #SET ONLY THE SELECTED BUTTON WITH SELECTED COLOR
+        for BT_INDEX, BUTTON in enumerate(self.BT_LIST):
+            if BT_INDEX == self.BT_SELECTED:
+                if BUTTON == "BT_INSTALL_PS1_GAME":
+                    self.BT_INSTALL_PS1_GAME.configure(fg_color=BT_SELECTED_COLOR)
+                    break
+                elif BUTTON == "BT_UNINSTALL_PS1_GAME":
+                    self.BT_UNINSTALL_PS1_GAME.configure(fg_color=BT_SELECTED_COLOR)
+                    break
+                elif BUTTON == "BT_INSTALL_PS2_GAME":
+                    self.BT_INSTALL_PS2_GAME.configure(fg_color=BT_SELECTED_COLOR)
+                    break
+                elif BUTTON == "BT_UNINSTALL_PS2_GAME":
+                    self.BT_UNINSTALL_PS2_GAME.configure(fg_color=BT_SELECTED_COLOR)
+                    break
+                elif BUTTON == "BT_CLOSE_APP":
+                    self.BT_CLOSE_APP.configure(fg_color=BT_SELECTED_COLOR)
+                    break
+    
+    def runSelectedButton(self):
+        #RUN THE METHOD OF THE SELECTED BUTTON
+        for BT_INDEX, BUTTON in enumerate(self.BT_LIST):
+            if BT_INDEX == self.BT_SELECTED:
+                if BUTTON == "BT_INSTALL_PS1_GAME":
+                    self.installPS1game()
+                    break
+                elif BUTTON == "BT_UNINSTALL_PS1_GAME":
+                    self.uninstallPS1game()
+                    break
+                elif BUTTON == "BT_INSTALL_PS2_GAME":
+                    self.installPS2game()
+                    break
+                elif BUTTON == "BT_UNINSTALL_PS2_GAME":
+                    self.uninstallPS2game()
+                    break
+                elif BUTTON == "BT_CLOSE_APP":
+                    self.closeApp()
+                    break
 
 #EVENTS
 def upEvent(event):

@@ -17,7 +17,7 @@ BT_UNINSTALL_PS1 = "img/uninstallPS1_icon.png"
 BT_INSTALL_PS2 = "img/PS2DiscInstaller_icon.png"
 BT_UNINSTALL_PS2 = "img/uninstallPS2_icon.png"
 
-BT_EXIT = "img/@/shutdownIcon.png"
+BT_EXIT = "img/shutdownIcon.png"
 
 #BUTTONS COLORS
 BT_SELECTED_COLOR = "#1f538d"
@@ -189,7 +189,7 @@ class mainWINDOW():
                 PS.excludePS1game(GAME_LIST[self.BT_SELECTED], PS1_OUTPUT)
                 self.BT_SELECTED = 1
                 GAMES_WINDOW.destroy()
-                self.PS1Window()
+                self.uninstallPS1game()
 
         def cancelEvent(event):
             self.BT_SELECTED = 1
@@ -226,7 +226,7 @@ class mainWINDOW():
         MAX_HEIGHT = GAMES_WINDOW.winfo_screenheight()
         PAD_X = 6
         PAD_Y = 6
-        COVER_WIDTH = 400
+        COVER_WIDTH = 150
         COVER_HEIGHT = COVER_WIDTH
 
         IDs = ["SLPS",
@@ -400,7 +400,7 @@ class mainWINDOW():
                 PS.excludePS2game(GAME_LIST[self.BT_SELECTED], PS2_OUTPUT)
                 self.BT_SELECTED = 3
                 GAMES_WINDOW.destroy()
-                self.PS2Window()
+                self.uninstallPS2game()
 
         def cancelEvent(event):
             self.BT_SELECTED = 3
